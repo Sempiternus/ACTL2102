@@ -115,3 +115,12 @@ sum(data$numberofclaims)
 ##Profit
 300*(N2*1.2+N1*1.1+N0+n1*0.9+n2*0.8) - (sum(data$numberofclaims))*2000
 >[1] 100680
+
+##Total Premiums in 2019
+N__2<-length(which(data$ncdlevel19==-2))
+N__1<-length(which(data$ncdlevel19==-1))
+N__0<-length(which(data$ncdlevel19==0))
+n__1<-length(which(data$ncdlevel19==1))
+n__2<-length(which(data$ncdlevel19==2))
+300*(N__2*1.2+N__1*1.1+N__0+n__1*0.9+n__2*0.8)
+>[1] 2829870
