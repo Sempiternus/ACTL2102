@@ -81,10 +81,10 @@ for(n in 1:1000){
 }
 ncdlevel20<-as.integer(ncdlevel20)
 data_new<-data.frame(data,ncdlevel20)
-N_2[n]<-length(which[data_new$ncdlevel20==-2))
-N_1[n]<-length(which[data_new$ncdlevel20==-1))
-N_0[n]<-length(which[data_new$ncdlevel20==0))
-n_1[n]<-length(which[data_new$ncdlevel20==1))
+N_2[n]<-length(which(data_new$ncdlevel20==-2))
+N_1[n]<-length(which(data_new$ncdlevel20==-1))
+N_0[n]<-length(which(data_new$ncdlevel20==0))
+n_1[n]<-length(which(data_new$ncdlevel20==1))
 n_2[n]<-length(which(data_new$ncdlevel20==2))
 }
 
