@@ -96,7 +96,7 @@ mn_1=mean(n_1)
 mn_2=mean(n_2)
 
 ##Total Expected Premium
-300*(mnN_2*1.2+mN_1*1.1+mN_0+m_n1*0.9+mn_2*0.8)
+300*(mN_2*1.2+mN_1*1.1+mN_0+mn_1*0.9+mn_2*0.8)
 >[1] 2697848
 ##Solve for Expected Value of a single premium
 (mN_2/10000)*300*1.2 + (mN_1/10000)*300*1.1 + (mN_0/10000)*300 + (mn_1/10000)*300*0.9 + (mn_2/10000)*300*0.8
