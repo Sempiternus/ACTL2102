@@ -1,0 +1,117 @@
+##Install necessary packages
+install.packages("markovchain")
+##Set up packages and data
+library(markovchain)
+library(readr)
+data<-read.csv("claimsdata.csv")
+
+============================================================================================================================================
+
+##Task 1
+##Consider that the MLE of one step transition probability is nothing more than the number of policy holders who moved from level i to j over the total number of policy holders at level i during 2018.
+##Number of policy holders in state i in 2018
+N2<-length(which(data$ncdlevel18==-2))
+N1<-length(which(data$ncdlevel18==-1))
+N0<-length(which(data$ncdlevel18==0))
+n1<-length(which(data$ncdlevel18==1))
+n2<-length(which(data$ncdlevel18==2))
+
+##Number of policy holdies transitioning from state i to j
+##Note that since states can only shift to the left by 1 or 2, or 1 to the right means that there can only be 2 or 3 transitions from a specified state
+N2_N2<-length(which(data$ncdlevel18==-2&data$ncdlevel19==-2))
+N2_N1<-length(which(data$ncdlevel18==-2&data$ncdlevel19==-1))
+
+N1_N2<-length(which(data$ncdlevel18==-1&data$ncdlevel19==-2))
+N1_N0<-length(which(data$ncdlevel18==-1&data$ncdlevel19==0))
+
+N0_N2<-length(which(data$ncdlevel18==0&data$ncdlevel19==-2))
+N0_N1<-length(which(data$ncdlevel18==0&data$ncdlevel19==-1))
+N0_n1<-length(which(data$ncdlevel18==0&data$ncdlevel19==1))
+
+n1_N1<-length(which(data$ncdlevel18==1&data$ncdlevel19==-1))
+n1_N0<-length(which(data$ncdlevel18==1&data$ncdlevel19==0))
+n1_n2<-length(which(data$ncdlevel18==1&data$ncdlevel19==2))
+
+n2_N0<-length(which(data$ncdlevel18==2&data$ncdlevel19==0))
+n2_n1<-length(which(data$ncdlevel18==2&data$ncdlevel19==1))
+n2_n2<-length(which(data$ncdlevel18==2&data$ncdlevel19==2))
+
+##Solving for probability
+pN2_N2<-N2_N2/N2
+pN2_N1<-N2_N1/N2
+
+pN1_N2<-N1_N2/N1
+pN1_N0<-N1_N0/N1
+
+pN0_N2<-N0_N2/N0
+pN0_N1<-N0_N1/N0
+pN0_n1<-N0_n1/N0
+
+pn1_N1<-n1_N1/n1
+pn1_N0<-n1_N0/n1
+pn1_n2<-n1_n2/n1
+
+pn2_N0<-n2_N0/n2
+pn2_n1<-n2_n1/n2
+pn2_n2<-n2_n2/n2
+
+##Transitional Matrix
+DiscountLevel <- new("markovchain", states = c("-2", "-1", "0", "1", "2"), 
+transitionMatrix = matrix(data = c(pN2_N2, pN2_N1, 0, 0, 0, 
+pN1_N2, 0, pN1_N0, 0, 0, 
+pN0_N2, pN0_N1, 0, pN0_n1, 0, 
+0, pn1_N1, pn1_N0, 0, pn1_n2, 
+0, 0, pn2_N0, pn2_n1, pn2_n2), 
+byrow = TRUE, nrow = 5), name = "Discount Level")
+
+============================================================================================================================================
+
+##Task 2 
+##Set up empty vectors
+ncdlevel20<-c()
+N_2<-c()
+N_1<-c()
+N_0<-c()
+n_1<-c()
+n_2<-c()
+##Create loop to simulate 2020 states 1000 times
+for(n in 1:1000){
+  for(t in 1:10000){
+    ncdlevel20[t]=rmarkovchain(1, object=DiscountLevel,t0=data$ncdlevel19[t])
+}
+ncdlevel20<-as.integer(ncdlevel20)
+data_new<-data.frame(data,ncdlevel20)
+N_2[n]<-length(which[data_new$ncdlevel20==-2))
+N_1[n]<-length(which[data_new$ncdlevel20==-1))
+N_0[n]<-length(which[data_new$ncdlevel20==0))
+n_1[n]<-length(which[data_new$ncdlevel20==1))
+n_2[n]<-length(which(data_new$ncdlevel20==2))
+}
+
+##Finding average amount of results across 1000 simulations
+mN_2=mean(N_2)
+mN_1=mean(N_1)
+mN_0=mean(N_0)
+mn_1=mean(n_1)
+mn_2=mean(n_2)
+
+##Total Expected Premium
+300*(mnN_2*1.2+mN_1*1.1+mN_0+m_n1*0.9+mn_2*0.8)
+>[1] 2697848
+##Solve for Expected Value of a single premium
+(mN_2/10000)*300*1.2 + (mN_1/10000)*300*1.1 + (mN_0/10000)*300 + (mn_1/10000)*300*0.9 + (mn_2/10000)*300*0.8
+>[1] 269.7848
+##Done for double checking
+
+===========================================================================================================================================
+
+##Task 3
+##Total premiums in 2018
+300*(N2*1.2+N1*1.1+N0+n1*0.9+n2*0.8)
+>[1] 3004680
+##Amount of claims
+sum(data$numberofclaims)
+>[1] 1452
+##Profit
+300*(N2*1.2+N1*1.1+N0+n1*0.9+n2*0.8) - (sum(data$numberofclaims))*2000
+>[1] 100680
