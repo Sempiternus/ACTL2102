@@ -96,8 +96,11 @@ mean(simulations)
 ##Solve for Expected Value of a single premium
 mean(Simulations)/1000
 >[1] 269.7848
-##Generaly Statistics
+##General Statistics
 summary(Simulations)
+##SD
+sd(Simulations)
+
 
 ===========================================================================================================================================
 
