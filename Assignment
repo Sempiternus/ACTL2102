@@ -124,14 +124,3 @@ n__2<-length(which(data$ncdlevel19==2))
 300*(N__2*1.2+N__1*1.1+N__0+n__1*0.9+n__2*0.8)
 >[1] 2829870
 
-
-========================
-##MISC
-##Finding average amount of results across 1000 simulations
-mN_2=mean(N_2)
-mN_1=mean(N_1)
-mN_0=mean(N_0)
-mn_1=mean(n_1)
-mn_2=mean(n_2)
-
-300*(mN_2*1.2+mN_1*1.1+mN_0+mn_1*0.9+mn_2*0.8)
