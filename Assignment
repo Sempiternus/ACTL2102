@@ -76,26 +76,25 @@ n_1<-c()
 n_2<-c()
 ##Create loop to simulate 2020 states 1000 times
 for(n in 1:1000){
-  for(t in 1:10000){
-    ncdlevel20[t]=rmarkovchain(1, object=DiscountLevel,t0=data$ncdlevel19[t])
-}
-ncdlevel20<-as.integer(ncdlevel20)
-data_new<-data.frame(data,ncdlevel20)
-N_2[n]<-length(which(data_new$ncdlevel20==-2))
-N_1[n]<-length(which(data_new$ncdlevel20==-1))
-N_0[n]<-length(which(data_new$ncdlevel20==0))
-n_1[n]<-length(which(data_new$ncdlevel20==1))
-n_2[n]<-length(which(data_new$ncdlevel20==2))
+    for(t in 1:10000){
+        ncdlevel20[t]=rmarkovchain(1, object=DiscountLevel,t0=data$ncdlevel19[t])
+    }
+    ncdlevel20<-as.integer(ncdlevel20)
+    N_2[n]<-length(which(ncdlevel20==-2))
+    N_1[n]<-length(which(ncdlevel20==-1))
+    N_0[n]<-length(which(ncdlevel20==0))
+    n_1[n]<-length(which(ncdlevel20==1))
+    n_2[n]<-length(which(ncdlevel20==2))
 }
 ##Create a string of values with Total Expected Premium for each of the 1000 simulations
 Simulations<-300*(N_2*1.2+N_1*1.1+N_0+n_1*0.9+n_2*0.8)
 
 ##Total Expected Premium
-mean(simulations)
->[1] 2697848
+mean(Simulations)
+>[1] 2697954
 ##Solve for Expected Value of a single premium
-mean(Simulations)/1000
->[1] 269.7848
+mean(Simulations)/10000
+>[1] 269.7954
 ##General Statistics
 summary(Simulations)
 ##SD
