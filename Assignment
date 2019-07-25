@@ -77,7 +77,7 @@ n_2<-c()
 ##Create loop to simulate 2020 states 1000 times
 for(n in 1:1000){
     for(t in 1:10000){
-        ncdlevel20[t]=rmarkovchain(1, object=DiscountLevel,t0=data$ncdlevel19[t])
+        ncdlevel20[t]=rmarkovchain(1, object=DiscountLevel,t0=data$ncdlevel19[t])[1]
     }
     ncdlevel20<-as.integer(ncdlevel20)
     N_2[n]<-length(which(ncdlevel20==-2))
@@ -105,7 +105,7 @@ sd(Simulations)
 
 ##Task 3
 ##Total premiums in 2018
-300*(N2*1.2+N1*1.1+N0+n1*0.9+n2*0.8)
+Premium18 <- 300*(N2*1.2+N1*1.1+N0+n1*0.9+n2*0.8)
 >[1] 3004680
 ##Amount of claims
 sum(data$numberofclaims)
@@ -120,7 +120,7 @@ N__1<-length(which(data$ncdlevel19==-1))
 N__0<-length(which(data$ncdlevel19==0))
 n__1<-length(which(data$ncdlevel19==1))
 n__2<-length(which(data$ncdlevel19==2))
-300*(N__2*1.2+N__1*1.1+N__0+n__1*0.9+n__2*0.8)
+Premium19 <- 300*(N__2*1.2+N__1*1.1+N__0+n__1*0.9+n__2*0.8)
 >[1] 2829870
 
 ##Total Premiums in 2021
@@ -143,7 +143,7 @@ for(n in 1:1000){
     n_21[n]<-length(which(ncdlevel21==2))
 }
 ##Create a string of values with Total Expected Premium for each of the 1000 simulations
-Simulations<-300*(N_21*1.2+N_11*1.1+N_01+n_11*0.9+n_21*0.8)
+Simulations21<-300*(N_21*1.2+N_11*1.1+N_01+n_11*0.9+n_21*0.8)
 mean(Simulations)
 >[1] 2600021
 
@@ -167,4 +167,15 @@ for(n in 1:1000){
     n_22[n]<-length(which(ncdlevel22==2))
 }
 ##Create a string of values with Total Expected Premium for each of the 1000 simulations
-Simulations<-300*(N_22*1.2+N_12*1.1+N_02+n_12*0.9+n_22*0.8)
+Simulations22<-300*(N_22*1.2+N_12*1.1+N_02+n_12*0.9+n_22*0.8)
+
+##Plotting Premiums
+Premiums <- c(Premium18, Premium19, mean(Simulations), mean(Simulations21), mean(Simulations22))
+EPremium<-data.frame(c(2018, 2019, 2020, 2021, 2022), Premiums)
+names(EPremium) <- c("Year", "Expected Premium")
+plot(EPremium,type = "o",col = "red", main = "Total Expected Premium")
+
+##Producing Premiums
+Profit<-data.frame(c(2018, 2019, 2020, 2021, 2022), Premiums, c(2000*sum(data$numberofclaims), 2000*sum(data$numberofclaims), 2000*sum(data$numberofclaims), 2000*sum(data$numberofclaims), 2000*sum(data$numberofclaims)))
+names(Profit) <- c("Year", "Expected Premium", "Expenses")
+Profit$Profit <- (Profit$`Expected Premium` - Profit$Expenses)
