@@ -179,3 +179,21 @@ plot(EPremium,type = "o",col = "red", main = "Total Expected Premium")
 Profit<-data.frame(c(2018, 2019, 2020, 2021, 2022), Premiums, c(2000*sum(data$numberofclaims), 2000*sum(data$numberofclaims), 2000*sum(data$numberofclaims), 2000*sum(data$numberofclaims), 2000*sum(data$numberofclaims)))
 names(Profit) <- c("Year", "Expected Premium", "Expenses")
 Profit$Profit <- (Profit$`Expected Premium` - Profit$Expenses)
+Profit<-floor(Profit)
+
+#Plotting States
+States<-data.frame(c(-2, -1, 0, 1, 2), c(N2, N1, N0, n1, n2),
+c(length(which(data$ncdlevel19==-2)), length(which(data$ncdlevel19==-1)), length(which(data$ncdlevel19==0)), length(which(data$ncdlevel19==1)), length(which(data$ncdlevel19==2))),
+c(mean(N_2), mean(N_1), mean(N_0), mean(n_1), mean(n_2)),
+c(mean(N_21), mean(N_11), mean(N_01), mean(n_11), mean(n_21)),
+c(mean(N_22), mean(N_12), mean(N_02), mean(n_12), mean(n_22)))
+names(States) <- c("State", "2018", "2019", "2020", "2021", "2022")
+States<-t(States)
+States<-floor(States)
+States<-States[-c(1), ]
+States<-as.data.frame(States)
+names(States) <- c("-2", "-1", "0", "1", "2")
+State123<-c(-2, -1, 0, 1, 2)
+matplot(States, type="b", pch=15:19, xlab="Year",ylab="No. of Policyholders",main="No. of Policyholders in a state")
+legend("bottomleft", inset=0.005, legend=State123, col=c(1:5),ncol=2, pch=15:19, bg= ("white"), horiz=F, cex = 0.42)
+
