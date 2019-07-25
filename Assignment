@@ -123,3 +123,48 @@ n__2<-length(which(data$ncdlevel19==2))
 300*(N__2*1.2+N__1*1.1+N__0+n__1*0.9+n__2*0.8)
 >[1] 2829870
 
+##Total Premiums in 2021
+ncdlevel21<-c()
+N_21<-c()
+N_11<-c()
+N_01<-c()
+n_11<-c()
+n_21<-c()
+##Create loop to simulate 2020 states 1000 times
+for(n in 1:1000){
+    for(t in 1:10000){
+        ncdlevel21[t]=rmarkovchain(1, object=DiscountLevel,t0=ncdlevel20[t])
+    }
+    ncdlevel21<-as.integer(ncdlevel21)
+    N_21[n]<-length(which(ncdlevel21==-2))
+    N_11[n]<-length(which(ncdlevel21==-1))
+    N_01[n]<-length(which(ncdlevel21==0))
+    n_11[n]<-length(which(ncdlevel21==1))
+    n_21[n]<-length(which(ncdlevel21==2))
+}
+##Create a string of values with Total Expected Premium for each of the 1000 simulations
+Simulations<-300*(N_21*1.2+N_11*1.1+N_01+n_11*0.9+n_21*0.8)
+mean(Simulations)
+>[1] 2600021
+
+##Total Premiums in 2022
+ncdlevel22<-c()
+N_22<-c()
+N_12<-c()
+N_02<-c()
+n_12<-c()
+n_22<-c()
+##Create loop to simulate 2020 states 1000 times
+for(n in 1:1000){
+    for(t in 1:10000){
+        ncdlevel22[t]=rmarkovchain(1, object=DiscountLevel,t0=ncdlevel21[t])
+    }
+    ncdlevel22<-as.integer(ncdlevel22)
+    N_22[n]<-length(which(ncdlevel22==-2))
+    N_12[n]<-length(which(ncdlevel22==-1))
+    N_02[n]<-length(which(ncdlevel22==0))
+    n_12[n]<-length(which(ncdlevel22==1))
+    n_22[n]<-length(which(ncdlevel22==2))
+}
+##Create a string of values with Total Expected Premium for each of the 1000 simulations
+Simulations<-300*(N_22*1.2+N_12*1.1+N_02+n_12*0.9+n_22*0.8)
