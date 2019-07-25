@@ -197,3 +197,4 @@ State123<-c(-2, -1, 0, 1, 2)
 matplot(States, type="b", pch=15:19, xlab="Year",ylab="No. of Policyholders",main="No. of Policyholders in a state")
 legend("bottomleft", inset=0.005, legend=State123, col=c(1:5),ncol=2, pch=15:19, bg= ("white"), horiz=F, cex = 0.42)
 
+steadyStates(DiscountLevel)
